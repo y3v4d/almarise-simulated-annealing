@@ -14,44 +14,54 @@ interface State {
 export class SimulatedAnnealingService {
     fn: MathFunction = (x: number) => x * x;
 
-    T: number = 1000;
-
+    T0: number = 1000;
+    x0: number = 0;
     step: number = 0.1;
     cooling: number = 0.95;
 
-    currentX: number = 0;
+    T: number = 1000;
+    x: number = 0;
     bestX: number = 0;
 
     history: State[] = [];
 
-    setup(fn: MathFunction, T: number = 1000, cooling: number = 0.995, step: number = 0.1, initialX: number = 0) {
-        this.history = [];
-
-        this.fn = fn;
-
-        this.T = T;
+    setParams(T0: number = 1000, cooling: number = 0.995, step: number = 0.1, x0: number = 0) {
+        this.T = T0;
+        this.T0 = T0;
         this.cooling = cooling;
         this.step = step;
-        this.currentX = initialX;
+
+        this.x = x0;
+        this.x0 = x0;
+        this.bestX = x0;
+    }
+
+    reset() {
+        this.history = [];
+
+        this.x = this.x0;
+        this.bestX = this.x0;
+
+        this.T = this.T0;
     }
 
     iterate(): void {
         this.saveState();
 
-        const direction = Math.random() < 0.5 ? -1 : 1;
-        const newX = this.currentX + direction * this.step;
+        const sign = Math.random() < 0.5 ? -1 : 1;
+        const newX = this.x + this.step * Math.sqrt(this.T / this.T0) * sign;
 
-        const currentValue = this.fn(this.currentX);
+        const currentValue = this.fn(this.x);
         const newValue = this.fn(newX);
 
         const deltaE = newValue - currentValue;
 
         if(deltaE < 0 || Math.random() < Math.exp(-deltaE / this.T)) {
-            this.currentX = newX;
+            this.x = newX;
         }
 
-        if(this.fn(this.currentX) < this.fn(this.bestX)) {
-            this.bestX = this.currentX;
+        if(this.fn(this.x) < this.fn(this.bestX)) {
+            this.bestX = this.x;
         }
 
         this.T *= this.cooling;
@@ -65,13 +75,9 @@ export class SimulatedAnnealingService {
         this.loadState();
     }
 
-    get value() {
-        return this.fn(this.currentX);
-    }
-
     private saveState() {
         this.history.push({
-            x: this.currentX,
+            x: this.x,
             bestX: this.bestX,
             T: this.T,
             cooling: this.cooling
@@ -81,7 +87,7 @@ export class SimulatedAnnealingService {
     private loadState() {
         const prevState = this.history.pop();
         if(prevState) {
-            this.currentX = prevState.x;
+            this.x = prevState.x;
             this.bestX = prevState.bestX;
 
             this.T = prevState.T;

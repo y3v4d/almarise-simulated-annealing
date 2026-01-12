@@ -8,8 +8,5 @@ This project is a visualization tool for the Simulated Annealing optimization al
 
 ## TODO
 
-- Add ability to input custom functions.
-- Make the graph more pretty.
-- Add better controls for simulation.
-- Add ability to input custom parameters (initial temperature, cooling rate, etc).
+- Cleanup the code.
 - Improve responsiveness for mobile devices.
