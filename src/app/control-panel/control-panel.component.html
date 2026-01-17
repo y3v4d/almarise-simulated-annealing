@@ -1,0 +1,182 @@
+<section class="h-full flex flex-col w-64 gap-2 bg-[#fafafa] rounded-lg border border-gray-300 shadow-black/20 shadow-sm">
+  <div class="grow overflow-y-auto flex flex-col gap-2 p-4">
+    <div>
+      <label for="fn-input">Function</label>
+      <input
+        id="fn-input"
+        type="text"
+        required
+        [(ngModel)]="fnString"
+        [disabled]="state.simulationRunning()"
+        [class.invalid-input]="!fnValid()"
+        placeholder="Enter function"
+      />
+    </div>
+
+    <div>
+      <label for="initial-temperature-input">Initial Temperature</label>
+      <input
+        id="initial-temperature-input"
+        type="text"
+        required
+        [(ngModel)]="state.initialTemperature"
+        [disabled]="state.simulationRunning()"
+        placeholder="Enter initial temperature"
+      />
+    </div>
+
+    <div>
+      <label for="initial-x-input">Initial X</label>
+      <input
+        id="initial-x-input"
+        type="number"
+        required
+        [(ngModel)]="state.initialX"
+        [disabled]="state.simulationRunning()"
+        placeholder="Enter initial X"
+      />
+    </div>
+
+    <div>
+      <label>X Boundaries</label>
+      <div class="flex gap-1">
+        <input
+          id="x-min-input"
+          type="number"
+          required
+          [(ngModel)]="state.xMin"
+          [disabled]="state.simulationRunning()"
+          placeholder="Enter min X"
+        />
+        <input
+          id="x-max-input"
+          type="number"
+          required
+          [(ngModel)]="state.xMax"
+          [disabled]="state.simulationRunning()"
+          placeholder="Enter max X"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label for="cooling-rate-input">Cooling Rate</label>
+      <input
+        id="cooling-rate-input"
+        type="number"
+        required
+        [(ngModel)]="state.coolingRate"
+        [disabled]="state.simulationRunning()"
+        placeholder="Enter cooling rate"
+      />
+    </div>
+
+    <div>
+      <label for="step-size-input">Step Size</label>
+      <input
+        id="step-size-input"
+        type="number"
+        required
+        [(ngModel)]="state.stepSize"
+        [disabled]="state.simulationRunning()"
+        placeholder="Enter step size"
+      />
+      <p class="text-xs px-1 mt-1 text-gray-400">
+        Step size is always scaled by the square root of the current temperature ratio. (√(T/T₀))
+      </p>
+    </div>
+
+    <div>
+      <label>Chart Spacing</label>
+      <div class="flex gap-1">
+        <input
+          id="spacing-x-input"
+          type="number"
+          required
+          [(ngModel)]="state.spacingX"
+          placeholder="Enter spacing in X direction"
+        />
+        <input
+          id="spacing-y-input"
+          type="number"
+          required
+          [(ngModel)]="state.spacingY"
+          placeholder="Enter spacing in Y direction"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label>Chart Pan</label>
+      <div class="flex gap-1">
+        <input
+          id="pan-x-input"
+          type="number"
+          required
+          [(ngModel)]="state.panX"
+          placeholder="Enter pan in X direction"
+        />
+        <input
+          id="pan-y-input"
+          type="number"
+          required
+          [(ngModel)]="state.panY"
+          placeholder="Enter pan in Y direction"
+        />
+      </div>
+    </div>
+  </div>
+  
+  <div class="flex gap-1 px-4">
+    <button 
+      class="start-button grow"
+      [disabled]="!canRun()"
+      [class.stop-button]="state.simulationRunning()"
+      (click)="onToggle()"
+    >
+      @if(state.simulationRunning()) {
+        STOP
+      } @else {
+        START
+      }
+    </button>
+    <button
+      class="control-button w-fit!" 
+      [disabled]="state.simulationRunning() || !canRun()"
+      (click)="onReset()"
+    >
+      <lucide-icon [img]="Refresh" size="16"/>
+    </button>
+  </div>
+  
+  <div class="flex gap-2 items-center px-4 pb-4">
+    <button 
+      class="control-button" 
+      [disabled]="state.iterations() <= 0 || state.simulationRunning() || !canRun()"
+      (click)="onStepBackward(10)"
+    >
+      <lucide-icon [img]="ChevronsLeft" size="16"/>
+    </button>
+    <button 
+      class="control-button" 
+      [disabled]="state.iterations() <= 0 || state.simulationRunning() || !canRun()"
+      (click)="onStepBackward(1)"
+    >
+      <lucide-icon [img]="ChevronLeft" size="16"/>
+    </button>
+    <button 
+      class="control-button" 
+      [disabled]="state.simulationRunning() || !canRun()"
+      (click)="onStepForward(1)"
+    >
+      <lucide-icon [img]="ChevronRight" size="16"/>
+    </button>
+    <button 
+      class="control-button" 
+      [disabled]="state.simulationRunning() || !canRun()"
+      (click)="onStepForward(10)"
+    >
+      <lucide-icon [img]="ChevronsRight" size="16"/>
+    </button>
+  </div>
+</section>

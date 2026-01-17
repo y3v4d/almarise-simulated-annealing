@@ -1,0 +1,45 @@
+@reference 'tailwindcss';
+
+input {
+  @apply w-full text-base border border-gray-300 rounded-lg px-2 py-1 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+input:focus {
+  @apply outline-blue-400 outline-2;
+}
+
+/* Chrome, Edge, Safari */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+label {
+  @apply block ml-1 text-xs font-medium;
+}
+
+.invalid-input {
+  @apply outline-red-400 outline-2;
+}
+
+.control-button {
+  @apply px-4 py-2 bg-gray-400 text-sm font-semibold text-white rounded-lg cursor-pointer transition
+      shadow-black/20 shadow-sm w-full flex items-center justify-center
+      hover:not-disabled:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.start-button {
+  @apply px-4 py-2 bg-green-400 text-lg font-semibold text-white rounded-lg cursor-pointer transition
+      shadow-black/20 shadow-sm
+      hover:not-disabled:brightness-95 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.stop-button {
+  @apply hover:brightness-95 bg-red-400;
+}

@@ -1,0 +1,93 @@
+<div class="h-full relative overflow-hidden">
+  <svg 
+    class="w-full h-full border border-gray-300 rounded-lg shadow-black/20 shadow-sm"
+    style="
+      background-color: #fafafa;
+      background-image: radial-gradient(rgb(200 200 200 / 0.8) 0.5px, transparent 0); 
+      background-size: 8px 8px; 
+      background-position: center;
+    "
+    viewBox="-50 -50 100 100"
+  >
+    <g [attr.transform]="transform()">
+      <!-- Axes -->
+      <line
+        x1="-1000"
+        y1="0"
+        x2="1000"
+        y2="0"
+        stroke="lightgray"
+        stroke-width="0.1"
+      />
+      <line
+        x1="0"
+        y1="-1000"
+        x2="0"
+        y2="1000"
+        stroke="lightgray"
+        stroke-width="0.1"
+      />
+
+      <!-- Function curve -->
+      <polyline 
+        [attr.points]="svgPolyline()"
+        stroke="lightgreen"
+        stroke-width="0.4"
+        fill="none"
+      />
+
+      <!-- X Boundaries -->
+      <line
+        [attr.x1]="svgMinX()"
+        y1="-1000"
+        [attr.x2]="svgMinX()"
+        y2="1000"
+        stroke="gray"
+        stroke-width="0.2"
+      />
+      <line
+        [attr.x1]="svgMaxX()"
+        y1="-1000"
+        [attr.x2]="svgMaxX()"
+        y2="1000"
+        stroke="gray"
+        stroke-width="0.2"
+      />
+
+      <!-- Best point marker -->
+      <circle 
+        [attr.cx]="svgBestPoint().x" 
+        [attr.cy]="svgBestPoint().y" 
+        r="0.8" 
+        fill="yellow" 
+        stroke="orange"
+        stroke-width="0.2"
+      />
+
+      <!-- Current point marker -->
+      <circle 
+        [attr.cx]="svgCurrentPoint().x" 
+        [attr.cy]="svgCurrentPoint().y" 
+        r="0.75" 
+        fill="red" 
+      />
+    </g>
+  </svg>
+
+  <div class="absolute top-2 left-3 text-sm flex flex-col gap-0.5">
+    <p>
+      Current Point: ({{ state.currentX() | number: '1.2-4' }}, {{ currentY() | number: '1.2-4' }})
+    </p>
+    <p>
+      Temperature: {{ state.T() | number: '1.2-2' }}
+    </p>
+    <p>
+      Iterations: {{ state.iterations() }}
+    </p>
+  </div>
+  <div class="absolute bottom-2 right-3 text-sm flex flex-col gap-0.5 items-end">
+    <p class="font-semibold">
+      Best Point: ({{ state.bestX() | number: '1.2-4' }}, {{ bestY() | number: '1.2-4' }})
+    </p>
+  </div>
+</div>

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 
 export type MathFunction = (x: number) => number;
 
-interface State {
+interface HistoryState {
     x: number;
     bestX: number;
 
@@ -16,6 +16,8 @@ export class SimulatedAnnealingService {
 
     T0: number = 1000;
     x0: number = 0;
+    xMin: number = -3;
+    xMax: number = 2.5;
     step: number = 0.1;
     cooling: number = 0.95;
 
@@ -23,9 +25,9 @@ export class SimulatedAnnealingService {
     x: number = 0;
     bestX: number = 0;
 
-    history: State[] = [];
+    history: HistoryState[] = [];
 
-    setParams(T0: number = 1000, cooling: number = 0.995, step: number = 0.1, x0: number = 0) {
+    setParams(T0: number = 1000, cooling: number = 0.995, step: number = 0.1, x0: number = 0, xMin: number = -3, xMax: number = 2.5) {
         this.T = T0;
         this.T0 = T0;
         this.cooling = cooling;
@@ -34,6 +36,9 @@ export class SimulatedAnnealingService {
         this.x = x0;
         this.x0 = x0;
         this.bestX = x0;
+
+        this.xMin = xMin;
+        this.xMax = xMax;
     }
 
     reset() {
@@ -50,6 +55,11 @@ export class SimulatedAnnealingService {
 
         const sign = Math.random() < 0.5 ? -1 : 1;
         const newX = this.x + this.step * Math.sqrt(this.T / this.T0) * sign;
+
+        if(newX < this.xMin || newX > this.xMax) {
+            this.T *= this.cooling;
+            return;
+        }
 
         const currentValue = this.fn(this.x);
         const newValue = this.fn(newX);
